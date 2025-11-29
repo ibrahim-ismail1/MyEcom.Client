@@ -7,7 +7,7 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'auth',
+    path: 'account',
     loadChildren: () =>
       import('./features/authentication/authentication-module').then(m => m.AuthenticationModule),
     //canActivate: [authGuard] // use authGuard if module needs protection
