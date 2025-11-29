@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from './material/material-module';
+
+import { ShoppingRoutingModule } from './shopping-routing-module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    MaterialModule
+    ShoppingRoutingModule
   ]
 })
-export class SharedModule { }
+export class ShoppingModule { }

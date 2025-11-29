@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from './material/material-module';
+
+import { PaymentsRoutingModule } from './payments-routing-module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    MaterialModule
+    PaymentsRoutingModule
   ]
 })
-export class SharedModule { }
+export class PaymentsModule { }

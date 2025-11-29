@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from './material/material-module';
+
+import { CartRoutingModule } from './cart-routing-module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    MaterialModule
+    CartRoutingModule
   ]
 })
-export class SharedModule { }
+export class CartModule { }
