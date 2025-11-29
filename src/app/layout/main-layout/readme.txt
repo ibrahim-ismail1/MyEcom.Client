@@ -1,0 +1,1 @@
+here will have features broken down into pages/components (Shop, Cart, Admin, Account).

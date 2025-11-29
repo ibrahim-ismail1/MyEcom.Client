@@ -1,0 +1,112 @@
+<div class="flex items-center justify-center min-h-[80vh] bg-gray-50 px-4 py-8">
+    <mat-card class="w-full max-w-lg p-6 shadow-lg">
+        <mat-card-header class="mb-4 justify-center">
+            <mat-card-title class="text-2xl font-bold text-gray-800">Create Account</mat-card-title>
+            <mat-card-subtitle class="mt-1">Join us to start shopping</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+                <!-- Display Name -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Full Name</mat-label>
+                    <input matInput formControlName="displayName" placeholder="John Doe">
+                    <mat-icon matSuffix>person</mat-icon>
+                    @if (registerForm.get('displayName')?.hasError('required')) {
+                    <mat-error>Name is required</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Email -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Email Address</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="user@example.com">
+                    <mat-icon matSuffix>email</mat-icon>
+                    @if (registerForm.get('email')?.hasError('required')) {
+                    <mat-error>Email is required</mat-error>
+                    }
+                    @if (registerForm.get('email')?.hasError('email')) {
+                    <mat-error>Please enter a valid email</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Phone (Optional) -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput type="tel" formControlName="phoneNumber" placeholder="+20 123 456 7890">
+                    <mat-icon matSuffix>phone</mat-icon>
+                </mat-form-field>
+
+                <!-- Password -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password">
+                    <button mat-icon-button matSuffix type="button" (click)="togglePassword($event)">
+                        <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    @if (registerForm.get('password')?.hasError('required')) {
+                    <mat-error>Password is required</mat-error>
+                    }
+                    @if (registerForm.get('password')?.hasError('minlength')) {
+                    <mat-error>Must be at least 6 characters</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Confirm Password (NEW) -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'"
+                        formControlName="confirmPassword">
+                    <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword($event)">
+                        <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+
+                    <!-- Check for mismatch error on the FormGroup, OR directly on control if updated -->
+                    @if (registerForm.hasError('mismatch') && (registerForm.get('confirmPassword')?.touched ||
+                    registerForm.get('password')?.touched)) {
+                    <mat-error>Passwords do not match</mat-error>
+                    }
+                    @if (registerForm.get('confirmPassword')?.hasError('required')) {
+                    <mat-error>Confirmation is required</mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- Profile Image Upload -->
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-gray-700">Profile Picture (Optional)</label>
+                        <div class="flex items-center gap-4">
+                            <button type="button" mat-stroked-button (click)="fileInput.click()">
+                                <mat-icon>cloud_upload</mat-icon> Choose File
+                            </button>
+                            <span class="text-sm text-gray-600 truncate max-w-[200px]">
+                                {{ selectedFileName() || 'No file chosen' }}
+                            </span>
+                            <input #fileInput type="file" (change)="onFileSelected($event)" class="hidden"
+                                accept="image/*" >
+                        </div>
+                    </div>
+
+                <!-- Submit Button -->
+                 <br>
+                <button mat-flat-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading()"
+                    class="w-full h-12 text-lg mt-4">
+                    @if (isLoading()) {
+                    <mat-spinner diameter="24" class="mr-2 inline-block"></mat-spinner>
+                    Creating Account...
+                    } @else {
+                    Sign Up
+                    }
+                </button>
+
+                <!-- Login Link -->
+                <div class="text-center mt-4">
+                    <p class="text-gray-600 text-sm">
+                        Already have an account?
+                        <a routerLink="/account/login" class="text-blue-600 hover:underline font-medium">Sign in</a>
+                    </p>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
