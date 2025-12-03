@@ -1,28 +1,86 @@
+// import { Component, Input, Output, EventEmitter } from '@angular/core';
+// import { Product } from '../../../core/models/Product.models';
+// import { ProductService } from '../../../core/services/product-service';
+
+
+// @Component({
+//   selector: 'app-product-card',
+//   templateUrl: './product-card.component.html',
+//   styleUrls: ['./product-card.component.scss'],
+//   standalone: false,
+
+// })
+// export class ProductCardComponent {
+
+//   constructor(private productService: ProductService) {}
+
+// getThumbnail(product: Product): string {
+
+
+  
+//   return this.productService.getProductImageUrl(product.thumbnailUrl,true);
+// }
+//   // INPUT: Data comes from parent (ProductListComponent)
+//   @Input() product!: Product;
+  
+//   // OUTPUT: Events sent to parent when user clicks buttons
+//   @Output() addToCart = new EventEmitter<Product>();
+//   @Output() addToWishlist = new EventEmitter<Product>();
+  
+//   // Handle add to cart button click
+//   onAddToCart(): void {
+//     this.addToCart.emit(this.product);
+//   }
+  
+//   // Handle add to wishlist button click
+//   onAddToWishlist(): void {
+//     this.addToWishlist.emit(this.product);
+//   }
+// }
+
+
+// product-card.component.ts - UPDATED
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router'; // ← ADD THIS IMPORT
 import { Product } from '../../../core/models/Product.models';
-import { MaterialModule } from '../../../shared/material/material-module';
-import { CurrencyPipe } from '@angular/common';
+import { ProductService } from '../../../core/services/product-service';
 
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss'],
-  imports: [MaterialModule, CurrencyPipe]
+  standalone: false,
 })
 export class ProductCardComponent {
-  // INPUT: Data comes from parent (ProductListComponent)
-  @Input() product!: Product;
+
+  // Add Router to constructor
+  constructor(
+    private productService: ProductService,
+    private router: Router // ← ADD THIS
+  ) {}
+
+  getThumbnail(product: Product): string {
+    return this.productService.getProductImageUrl(product.thumbnailUrl, true);
+  }
   
-  // OUTPUT: Events sent to parent when user clicks buttons
+  @Input() product!: Product;
   @Output() addToCart = new EventEmitter<Product>();
   @Output() addToWishlist = new EventEmitter<Product>();
   
-  // Handle add to cart button click
+  // NEW METHOD: Navigate to product details
+  navigateToProductDetails(): void {
+    console.log(this.product.id);
+    
+    // this.router.navigate(['/product', this.product.id]);
+    // OR if you have a different route:
+    // this.router.navigate(['/products', this.product.id]);
+    this.router.navigate(['/shopping/product', this.product.id]);
+  }
+  
   onAddToCart(): void {
     this.addToCart.emit(this.product);
   }
   
-  // Handle add to wishlist button click
   onAddToWishlist(): void {
     this.addToWishlist.emit(this.product);
   }

@@ -1,76 +1,100 @@
+/* search-filter.component.scss - WITH BETTER TEXT STYLING */
 .search-filter {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .filter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
   
   .filter-title {
     margin: 0;
-    font-size: 18px;
-    font-weight: 500;
-    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
   }
 }
 
 .filter-section {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   
   h4 {
     margin: 0 0 12px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #555;
+    font-size: 16px;
+    font-weight: 600;
+    color: #34495e;
   }
   
-  &:last-child {
-    margin-bottom: 0;
+  .rating-subtitle {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: #7f8c8d;
+    font-weight: 400;
   }
 }
 
-// Search field
-mat-form-field {
-  width: 100%;
-}
-
-// Price ranges
+// Price range buttons
 .price-ranges {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 20px;
   
   .price-range-btn {
-    font-size: 12px;
-    padding: 6px;
+    font-size: 13px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .price-label {
+      font-weight: 500;
+      color: inherit;
+    }
     
     &.active {
-      background-color: #3f51b5;
+      background: linear-gradient(135deg, #3f51b5, #2196f3);
       color: white;
-      border-color: #3f51b5;
+      font-weight: 600;
+      
+      .price-label {
+        color: white;
+      }
     }
   }
 }
 
 .custom-price {
+  .custom-price-label {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+  }
+  
   .price-inputs {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     
     .price-input {
       flex: 1;
     }
     
     .price-to {
-      color: #666;
-      font-size: 14px;
+      color: #7f8c8d;
+      font-size: 15px;
+      font-weight: 500;
     }
   }
 }
@@ -79,36 +103,79 @@ mat-form-field {
 .rating-buttons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   
   .rating-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    min-height: 56px;
+    
+    .rating-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .stars {
+      display: flex;
+      gap: 2px;
+      
+      .star {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: #ffd740;
+      }
+    }
+    
+    .rating-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .up-text {
+      font-size: 13px;
+      color: #666;
+      font-weight: 500;
+    }
     
     &.active {
-      background-color: #ff9800;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
       color: white;
-      border-color: #ff9800;
       
       .stars {
         .star {
           color: white;
         }
       }
-    }
-    
-    .stars {
-      display: flex;
       
-      .star {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        color: #ff9800;
+      .rating-text {
+        color: white;
+        font-weight: 600;
+      }
+      
+      .up-text {
+        color: white;
+        font-weight: 500;
       }
     }
+  }
+}
+
+// Form fields
+mat-form-field {
+  width: 100%;
+  
+  .mat-form-field-label {
+    font-weight: 500;
+  }
+  
+  input::placeholder {
+    color: #95a5a6;
   }
 }
 
@@ -118,7 +185,18 @@ mat-form-field {
     grid-template-columns: 1fr;
   }
   
-  .search-filter {
-    padding: 16px;
+  .rating-buttons {
+    .rating-btn {
+      padding: 10px 16px;
+      min-height: 52px;
+      
+      .rating-content {
+        gap: 10px;
+      }
+      
+      .rating-text {
+        font-size: 13px;
+      }
+    }
   }
 }

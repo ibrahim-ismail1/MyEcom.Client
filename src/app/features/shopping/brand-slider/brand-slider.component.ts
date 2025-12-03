@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Brand } from '../../../core/models/Product.models';
-import{ MaterialModule } from '../../../shared/material/material-module';
+
 
 @Component({
   selector: 'app-brand-slider',
   templateUrl: './brand-slider.component.html',
   styleUrls: ['./brand-slider.component.scss'],
-  imports: [MaterialModule]
+  standalone: false,
 })
 export class BrandSliderComponent {
   // INPUT 1: List of brands to display

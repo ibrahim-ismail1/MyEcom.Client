@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Category } from '../../../core/models/Product.models';
-import { MaterialModule } from '../../../shared/material/material-module';
+
 
 @Component({
   selector: 'app-category-slider',
   templateUrl: './category-slider.component.html',
   styleUrls: ['./category-slider.component.scss'],
-  imports: [MaterialModule]
+  standalone: false,
 })
 export class CategorySliderComponent {
   // INPUT 1: List of categories to display

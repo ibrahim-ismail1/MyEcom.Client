@@ -17,14 +17,6 @@
       [class.active]="isCategorySelected(category.id)"
       (click)="selectCategory(category.id)">
       
-      <!-- Category Image -->
-      <div class="category-image">
-        <img 
-          [src]="category.imageUrl" 
-          [alt]="category.name"
-          (error)="category.imageUrl = 'assets/default-category.jpg'">
-      </div>
-      
       <!-- Category Name -->
       <span class="category-name">{{ category.name }}</span>
     </button>

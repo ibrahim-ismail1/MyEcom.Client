@@ -155,40 +155,38 @@
 
 
 // app.component.ts (temporary test)
-// import { Component } from '@angular/core';
-// import { ProductCardComponent } from '../product-card/product-card.component';
+import { Component } from '@angular/core';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
-// @Component({
-//   selector: 'app-root',
-//   template: `
-//     <h1>Testing Product Card</h1>
-//     <app-product-card 
-//       [product]="testProduct"
-//       (addToCart)="onAddToCart($event)">
-//     </app-product-card>
-//   `,
-//   imports: [ProductCardComponent]
-// })
-// export class TestinComponent { 
-//   testProduct = {
-//     id: 1,
-//     title: 'Test Product',
-//     price: 99.99,
-//     discountPercentage: 10,
-//     rating: 4.5,
-//     thumbnailUrl: 'https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp',
-//     description: 'This is a test product for unit testing the ProductCardComponent.',
-//     stock: 50,
-//     brandId: 1,
-//     categoryId: 1,
-//     isDeleted: false,
-//     quantitySold: 10,
-//     brandName: 'Test Brand',
-//     categoryName: 'Test Category'
-//   };
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>Testing Product Card</h1>
+    
+  `,
+  standalone: false,
+ 
+})
+export class TestinComponent { 
+  testProduct = {
+    id: 1,
+    title: 'Test Product',
+    price: 99.99,
+    discountPercentage: 10,
+    rating: 4.5,
+    thumbnailUrl: 'https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp',
+    description: 'This is a test product for unit testing the ProductCardComponent.',
+    stock: 50,
+    brandId: 1,
+    categoryId: 1,
+    isDeleted: false,
+    quantitySold: 10,
+    brandName: 'Test Brand',
+    categoryName: 'Test Category'
+  };
   
-//   onAddToCart(product: any) {
-//     console.log('Add to cart:', product);
-//   }
-// }
+  onAddToCart(product: any) {
+    console.log('Add to cart:', product);
+  }
+}
 
