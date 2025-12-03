@@ -23,10 +23,22 @@ export const routes: Routes = [
       import('./features/cart/cart-module').then(m => m.CartModule)
   },
   {
-    path: 'payments',
-    loadChildren: () =>
-      import('./features/payments/payments-module').then(m => m.PaymentsModule)
-  },
+  path: 'payment',
+  loadChildren: () =>
+    import('./features/payments/payments.route').then(m => m.PAYMENT_ROUTES)
+},
+{
+  path: 'order/success/:orderId',
+  loadComponent: () =>
+    import('./features/payments/payment-success.component').then(m => m.PaymentSuccessComponent)
+},
+
+{
+  path: 'order/cancel',
+  loadComponent: () =>
+    import('./features/payments/payment-cancel.component').then(m => m.PaymentCancelComponent)
+},
+
   {
     path: 'orders',
     loadChildren: () =>
