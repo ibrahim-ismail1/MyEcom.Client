@@ -45,19 +45,25 @@ export class ProductReviewComponent {
    ------------------------------------------------*/
   submitReview(): void {
     const review: ProductReviewCreate = {
+      
       productId: this.productId,
       rating: this.reviewRating,
       title: this.reviewTitle,
       description: this.reviewDescription
     };
-
+     console.log(review);
+     
     this.productService.createReview(review).subscribe({
       next: () => {
         this.snack.open('Review added successfully', 'Close', { duration: 1500 });
         this.clearForm();
         this.refreshReviews.emit();
+       
+        
       },
+     
       error: () => this.snack.open('Failed to submit review', 'Close')
+      
     });
   }
 
@@ -65,7 +71,8 @@ export class ProductReviewComponent {
    * START EDITING
    ------------------------------------------------*/
   startEdit(review: ProductReview): void {
-    this.isEditing = true;
+   console.log(review);
+  
     this.editReviewId = review.id;
     this.reviewRating = review.rating;
     this.reviewTitle = review.title;
@@ -79,17 +86,20 @@ export class ProductReviewComponent {
     if (!this.editReviewId) return;
 
     const update: ProductReviewUpdate = {
+      productId: this.productId,
       id: this.editReviewId,
       rating: this.reviewRating,
       title: this.reviewTitle,
       description: this.reviewDescription
     };
-
+     console.log(update);
     this.productService.updateReview(update).subscribe({
       next: () => {
         this.snack.open('Review updated', 'Close', { duration: 1500 });
         this.cancelEdit();
         this.refreshReviews.emit();
+       
+        
       },
       error: () => this.snack.open('Failed to update review', 'Close')
     });

@@ -1,3 +1,5 @@
+
+
 // Main Product Interface
 export interface Product {
   id: number;
@@ -34,8 +36,6 @@ export interface ProductReviewCreate {
   description: string;
   rating: number;
   productId: number;
- 
-
 }
 
 export interface ProductReview {
@@ -48,6 +48,7 @@ export interface ProductReview {
   updatedBy: string | null;
   updatedOn: string | null;
   isDeleted: boolean;
+  ProductId: number;
   
   // Relation keys
   
@@ -58,6 +59,7 @@ export interface ProductReview {
 }
 
 export interface ProductReviewUpdate {
+  productId: number;
   id: number;
   title: string;
   description: string;
@@ -88,7 +90,7 @@ export interface ProductFilter {
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
-  search?: string;
+  search?: string|null;
   sortBy?: 'price' | 'rating' | 'name'|'price' ;
   sortOrder?: 'asc' | 'desc';
   page?: number;
