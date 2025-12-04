@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'; // ← ADD Router
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../../core/services/product-service';
 import { Product } from '../../../core/models/product.models';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MaterialModule } from '../../../shared/material/material-module';
 import { CartService } from '../../../core/services/cart-service';
+import { WishlistService } from '../../../core/services/wishlist-service';
+
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details-component.html',
@@ -12,6 +14,8 @@ import { CartService } from '../../../core/services/cart-service';
   standalone: false
 })
 export class ProductDetailsComponent implements OnInit {
+  private wishlistService = inject(WishlistService);
+  
   product: Product | null = null;
   isLoading = false;
   error: string | null = null;
@@ -30,12 +34,8 @@ export class ProductDetailsComponent implements OnInit {
     this.loadProduct();
   }
 
-  // NEW METHOD: Navigate back to shopping
   goBackToShopping(): void {
-    // Navigate back to the shopping page
     this.router.navigate(['/shopping']);
-    // OR if you want to go back to the previous page:
-    // this.router.navigate(['..'], { relativeTo: this.route });
   }
 
   loadProduct(): void {
@@ -101,6 +101,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
+  // UPDATED: Add to cart with product ID and quantity parameters
   addToCart(): void {
     if (!this.product) return;
     
@@ -111,12 +112,21 @@ export class ProductDetailsComponent implements OnInit {
     alert(`Added ${this.quantity} ${this.product.title}(s) to cart!`);
   }
 
-  // REMOVE the buyNow() method completely
-  // buyNow(): void {
-  //   if (!this.product) return;
-  //   this.addToCart();
-  //   console.log('Buy now clicked');
-  // }
+  // NEW: Add to wishlist with product ID parameter
+  addToWishlist(): void {
+    if (!this.product) return;
+    
+    // Get the product ID
+    const productId = this.product.id;
+    
+    // TODO: Implement wishlist service - use this parameter:
+    this.wishlistService.addToWishlist(productId).subscribe();
+    
+    console.log('Add to wishlist - Product ID:', productId);
+    
+    // Show success message
+    alert(`Added ${this.product.title} to your wishlist!`);
+  }
 
   isInStock(): boolean {
     return this.product ? this.product.stock > 0 : false;

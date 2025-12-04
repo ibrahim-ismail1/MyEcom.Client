@@ -79,10 +79,12 @@ export class ProductCardComponent {
   }
   
   onAddToCart(): void {
-    this.addToCart.emit(this.product);
+    console.log(this.product.id);
+    this.addToCart.emit(this.product);  
   }
   
   onAddToWishlist(): void {
+    console.log(this.product.id);
     this.addToWishlist.emit(this.product);
   }
 }
