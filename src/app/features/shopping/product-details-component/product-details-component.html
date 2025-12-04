@@ -175,6 +175,15 @@
 
     <!-- Reviews Section -->
     <div class="reviews-section">
+      <div class="reviews-section">
+  <h3>Customer Reviews</h3>
+
+  <app-product-review
+    [productId]="product.id"
+    [reviews]="product.reviews || []"
+    (refreshReviews)="loadProduct()">
+  </app-product-review>
+</div>
       <h3>Customer Reviews</h3>
       @if (product.reviews?.length) {
         <div class="reviews-list">

@@ -34,8 +34,8 @@ export interface ProductReviewCreate {
   description: string;
   rating: number;
   productId: number;
-  appUserId: string;
-  createdBy: string;
+ 
+
 }
 
 export interface ProductReview {
@@ -50,8 +50,7 @@ export interface ProductReview {
   isDeleted: boolean;
   
   // Relation keys
-  productId: number;
-  appUserId: string;
+  
   
   // Extra read-only fields for display
   productTitle: string | null;
@@ -63,7 +62,6 @@ export interface ProductReviewUpdate {
   title: string;
   description: string;
   rating: number;
-  updatedBy: string;
 }
 
 // Category Interface
