@@ -1,3 +1,6 @@
+
+
+
 <div class="review-container">
   
   <!-- Review Form -->
@@ -29,58 +32,64 @@
     </mat-form-field>
 
     <!-- Buttons -->
-    <div class="review-buttons">
-      <button *ngIf="!isEditing"
-              mat-raised-button 
-              color="primary"
-              (click)="submitReview()">
-        Submit Review
-      </button>
-
-      <button 
-              mat-raised-button 
-              color="accent"
-              (click)="updateReview()">
-        Save Changes
-      </button>
-
-      <button *ngIf="isEditing"
-              mat-button 
-              color="warn"
-              (click)="cancelEdit()">
-        Cancel
-      </button>
-    </div>
+    <!-- Buttons -->
+<div class="review-buttons">
+  @if (!isEditing) {
+    <button mat-raised-button 
+            color="primary"
+            (click)="submitReview()">
+      Submit Review
+    </button>
+  }
+  
+  @if (isEditing) {
+    <button mat-raised-button 
+            color="accent"
+            (click)="updateReview()">
+      Save Changes
+    </button>
+    
+    <button mat-button 
+            color="warn"
+            (click)="cancelEdit()">
+      Cancel
+    </button>
+  }
+</div>
   </div>
 
+ 
   <!-- Existing Reviews List -->
-  <div class="reviews-list">
-    @for (review of reviews; track review.id) {
-      <div class="review-item">
+<div class="reviews-list">
+  @for (review of reviews; track review.id) {
+    <div class="review-item">
 
-        <div class="review-header">
-          <strong>{{ review.appUserDisplayName || 'User' }}</strong>
+      <div class="review-header">
+        <strong>{{ review.appUserDisplayName || 'User' }}</strong>
 
-          <div class="review-stars">
-            @for (star of [1,2,3,4,5]; track star) {
-              <mat-icon class="star small">
-                {{ star <= review.rating ? 'star' : 'star_border' }}
-              </mat-icon>
-            }
-          </div>
+        <div class="review-stars">
+          @for (star of [1,2,3,4,5]; track star) {
+            <mat-icon class="star small">
+              {{ star <= review.rating ? 'star' : 'star_border' }}
+            </mat-icon>
+          }
         </div>
+      </div>
 
-        <h4>{{ review.title }}</h4>
-        <p>{{ review.description }}</p>
+      <h4>{{ review.title }}</h4>
+      <p>{{ review.description }}</p>
 
-        <span class="date">{{ review.createdOn | date }}</span>
+      <span class="date">{{ review.createdOn | date }}</span>
 
-        <!-- Edit / Delete Buttons -->
+      <!-- Edit / Delete Buttons - Only show if review belongs to current user -->
+      @if (isCurrentUsersReview(review.appUserId)) {
         <div class="review-actions">
           <button mat-button (click)="startEdit(review)">Edit</button>
           <button mat-button color="warn" (click)="deleteReview(review.id)">Delete</button>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  }
+</div>
+
 </div>

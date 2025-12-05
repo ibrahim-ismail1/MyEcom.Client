@@ -1,21 +1,9 @@
 
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-product-review',
-//   templateUrl: './product-review.component.html',  // Fixed file extension
-//   styleUrls: ['./product-review.component.scss'] ,
-//     standalone: false  // Fixed property name
-// })
-// export class ProductReviewComponent {  // Fixed class name
-//   // Add your review logic here
-// }
-
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { ProductReviewCreate, ProductReviewUpdate, ProductReview } from '../../../core/models/product.models';
 import { ProductService } from '../../../core/services/product-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { AuthService } from '../../../core/services/auth-service';
 @Component({
   selector: 'app-product-review',
   templateUrl: './product-review.component.html',
@@ -27,6 +15,11 @@ export class ProductReviewComponent {
   @Input() productId!: number;
   @Input() reviews: ProductReview[] = [];
   @Output() refreshReviews = new EventEmitter<void>();
+  private authService = inject(AuthService);
+
+   currentUserId: string | null = null;
+
+  
 
   // Form state
   reviewTitle = '';
@@ -38,7 +31,13 @@ export class ProductReviewComponent {
   editReviewId: number | null = null;
 
   constructor(private productService: ProductService,
-              private snack: MatSnackBar) {}
+private snack: MatSnackBar) {
+this.currentUserId = this.authService.currentUser()?.id || null;  }
+
+
+isCurrentUsersReview(reviewUserId: string|null): boolean {
+    return this.currentUserId === reviewUserId;
+  }
 
   /* -----------------------------------------------
    * CREATE REVIEW
@@ -71,39 +70,38 @@ export class ProductReviewComponent {
    * START EDITING
    ------------------------------------------------*/
   startEdit(review: ProductReview): void {
-   console.log(review);
+  console.log(review);
   
-    this.editReviewId = review.id;
-    this.reviewRating = review.rating;
-    this.reviewTitle = review.title;
-    this.reviewDescription = review.description;
-  }
+  this.isEditing = true; // Add this line
+  this.editReviewId = review.id;
+  this.reviewRating = review.rating;
+  this.reviewTitle = review.title;
+  this.reviewDescription = review.description;
+}
 
   /* -----------------------------------------------
    * UPDATE REVIEW
    ------------------------------------------------*/
   updateReview(): void {
-    if (!this.editReviewId) return;
+  if (!this.editReviewId) return;
 
-    const update: ProductReviewUpdate = {
-      productId: this.productId,
-      id: this.editReviewId,
-      rating: this.reviewRating,
-      title: this.reviewTitle,
-      description: this.reviewDescription
-    };
-     console.log(update);
-    this.productService.updateReview(update).subscribe({
-      next: () => {
-        this.snack.open('Review updated', 'Close', { duration: 1500 });
-        this.cancelEdit();
-        this.refreshReviews.emit();
-       
-        
-      },
-      error: () => this.snack.open('Failed to update review', 'Close')
-    });
-  }
+  const update: ProductReviewUpdate = {
+    productId: this.productId,
+    id: this.editReviewId,
+    rating: this.reviewRating,
+    title: this.reviewTitle,
+    description: this.reviewDescription
+  };
+  console.log(update);
+  this.productService.updateReview(update).subscribe({
+    next: () => {
+      this.snack.open('Review updated', 'Close', { duration: 1500 });
+      this.cancelEdit();
+      this.refreshReviews.emit();
+    },
+    error: () => this.snack.open('Failed to update review', 'Close')
+  });
+}
 
   /* -----------------------------------------------
    * DELETE REVIEW
@@ -123,12 +121,11 @@ export class ProductReviewComponent {
   /* -----------------------------------------------
    * HELPERS
    ------------------------------------------------*/
-  cancelEdit(): void {
-    this.isEditing = false;
-    this.editReviewId = null;
-    this.clearForm();
-  }
-
+cancelEdit(): void {
+  this.isEditing = false; // This is already here
+  this.editReviewId = null;
+  this.clearForm();
+}
   clearForm(): void {
     this.reviewRating = 5;
     this.reviewTitle = '';
