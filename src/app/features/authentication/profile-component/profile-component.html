@@ -113,9 +113,9 @@
                     <div class="flex justify-end mt-4">
                         <button mat-flat-button color="primary" type="submit"
                             [disabled]="profileForm.invalid || isLoading() || profileForm.pristine && !selectedFile"
-                            class="px-8 py-2 !flex !items-center !justify-center">
+                            class="px-8 py-2 w-full h-12 text-lg">
                             @if (isLoading()) {
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center justify-center gap-2 w-full">
                                 <mat-spinner diameter="20"></mat-spinner>
                                 <span>Saving...</span>
                             </div>

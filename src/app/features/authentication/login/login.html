@@ -35,10 +35,10 @@
 
                 <!-- Submit Button -->
                 <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading()"
-                    class="w-full h-12 text-lg !flex !items-center !justify-center">
+                    class="w-full h-12 text-lg">
                     @if (isLoading()) {
-                    <div class="flex items-center gap-2">
-                        <mat-spinner diameter="24"></mat-spinner>
+                    <div class="flex items-center justify-center gap-2 w-full">
+                        <mat-spinner diameter="24" strokeWidth="3"></mat-spinner>
                         <span>Signing in...</span>
                     </div>
                     } @else {
