@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Brand } from '../../../core/models/broduct.models';
+import { Brand } from '../../../core/models/product.models';
 
 
 @Component({

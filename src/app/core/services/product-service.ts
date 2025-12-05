@@ -13,7 +13,7 @@ import {
   Category,
   Brand,
   ProductImageUrl
-} from '../models/broduct.models';
+} from '../models/product.models';
 import { environment } from '../../../environments/environment';
 
 // Helper interface for API response
