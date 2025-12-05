@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-
+ import { CartService } from '../../core/services/cart-service';
 @Component({
   standalone: true,
   selector: 'app-payment-success',
@@ -40,4 +40,26 @@ export class PaymentSuccessComponent {
 
   route = inject(ActivatedRoute);
   orderId = this.route.snapshot.params['orderId'];
+  private cartService = inject(CartService);
+  ngOnInit(): void {
+    // Clear the cart upon successful payment
+   const clear$ = this.cartService.clearCart();
+  
+  if (clear$) {
+    clear$.subscribe({
+      next: () => console.log("Frontend cart cleared"),
+      error: err => console.error("Failed to clear cart", err)
+    });
+  } else {
+    console.warn("Cart is not loaded yet, trying again in 300ms...");
+    setTimeout(() => {
+      this.cartService.clearCart()?.subscribe({
+        next: () => console.log("Frontend cart cleared (retry)"),
+        error: err => console.error("Failed to clear cart", err)
+      });
+    }, 300);
+  }
+    
+  }
+  
 }

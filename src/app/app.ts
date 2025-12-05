@@ -30,15 +30,18 @@ export class App {
   }
 
   ngOnInit() {
-    this.cartService.getUserCart(this.userId!).subscribe({
-      next: (res) => {
-        if (res.isSuccess) {
-          this.cartId = res.result.id;
-          console.log("Loaded CartId =", this.cartId);
-          localStorage.setItem('cartId', this.cartId!.toString());
-        }
-      }
-    });
+    if (this.userId) {
+    this.cartService.loadCart();
+    }
+    // this.cartService.getUserCart(this.userId!).subscribe({
+    //   next: (res) => {
+    //     if (res.isSuccess) {
+    //       this.cartId = res.result.id;
+    //       console.log("Loaded CartId =", this.cartId);
+    //       localStorage.setItem('cartId', this.cartId!.toString());
+    //     }
+    //   }
+    // });
   }
 
 }

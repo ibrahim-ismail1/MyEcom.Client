@@ -3,6 +3,7 @@ import { tap } from 'rxjs';
 import { ApiService } from './api-service';
 import { GetCartDTO, GetCartItemDTO, AddCartItemDTO } from '../models/cart.models';
 import { AuthService } from './auth-service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -47,83 +48,99 @@ export class CartService {
             this.cartSignal.set(cart);
 
           } else {
-            this.createCart();
+            // this.createCart();
           }
         },
-        error: () => this.createCart()
+        // error: () => this.createCart()
       });
   }
 
-  // ------------------------------
-  // CREATE CART
-  // ------------------------------
-  private createCart(): void {
-    const user = this.auth.currentUser();
-    if (!user) return;
-
-    const dto = {
-      appUserId: user.id,
-      createdBy: user.id
-    };
-
-    this.api.post<{ result: GetCartDTO, isSuccess: boolean }>('api/cart', dto)
-      .subscribe({
-        next: (res) => {
-          if (res.isSuccess) {
-            this.cartSignal.set(res.result);
-          }
-        },
-        error: (err) => console.error("Failed to create cart:", err)
-      });
-  }
+  
 
 
   // ------------------------------
   // ADD ITEM TO CART
   // ------------------------------
-  addToCart(productId: number, quantity = 1, unitPrice: number): any {
-    const user = this.auth.currentUser();
-    const cart = this.cartSignal();
+  addToCart(productId: number, quantity = 1, unitPrice: number) : any {
+  const user = this.auth.currentUser();
+  if (!user) {
+    throw new Error("User not logged in.");
+  }
 
-    if (!user) throw new Error("User not logged in.");
+  let cart = this.cartSignal();
 
-    if (!cart) {
-      this.createCart();
-      return this.addToCart(productId, quantity, unitPrice);
-    }
+  // 1️⃣ If cart not loaded → load it and retry ONCE
+  if (!cart) {
+    console.log("Cart not loaded → fetching from backend...");
 
-    const dto = {
-      cartId: cart.id,
-      productId,
-      quantity,
-      unitPrice,   // SEND REAL PRICE
-      totalPrice:unitPrice*quantity,
-      createdBy: user.id
-    };
-
-    return this.api.post<{ result: GetCartItemDTO, isSuccess: boolean }>('api/cartitem', dto)
+    return this.api.get<{ result: GetCartDTO, isSuccess: boolean }>('api/cart/user')
       .pipe(
         tap(res => {
-          if (!res.isSuccess || !res.result) return;
+          if (res.isSuccess) {
+            const loadedCart = res.result;
 
-          const addedItem = res.result;
-          const current = this.cartSignal();
-          if (!current) return;
+            // Recalculate totalPrice
+            loadedCart.cartItems = loadedCart.cartItems.map(item => ({
+              ...item,
+              totalPrice: item.unitPrice * item.quantity
+            }));
 
-          // Update or add new item
-          const existing = current.cartItems.find(i => i.productId === addedItem.productId);
-          if (existing) {
-            existing.quantity += addedItem.quantity;
-            existing.unitPrice = addedItem.unitPrice;      // update unitPrice too
-            existing.totalPrice += addedItem.totalPrice;
+            loadedCart.totalAmount = loadedCart.cartItems.reduce(
+              (sum, item) => sum + item.totalPrice,
+              0
+            );
+
+            this.cartSignal.set(loadedCart);
+            console.log("Cart loaded successfully");
           } else {
-            current.cartItems.push(addedItem);
+            throw new Error("Cart does not exist in backend.");
           }
-
-          this.cartSignal.set({ ...current });
+        }),
+        switchMap(() => {
+          // retry addToCart AFTER loading cart
+          return this.addToCart(productId, quantity, unitPrice);
         })
       );
   }
+
+  // 2️⃣ Cart already exists → add item normally
+  const dto = {
+    cartId: cart.id,
+    productId,
+    quantity,
+    unitPrice,
+    totalPrice: unitPrice * quantity,
+    createdBy: user.id
+  };
+
+  return this.api.post<{ result: GetCartItemDTO, isSuccess: boolean }>('api/cartitem', dto)
+    .pipe(
+      tap(res => {
+        if (!res.isSuccess || !res.result) return;
+
+        const addedItem = res.result;
+        const current = this.cartSignal();
+        if (!current) return;
+
+        // Update UI cart
+        const existing = current.cartItems.find(i => i.productId === addedItem.productId);
+
+        if (existing) {
+          existing.quantity += addedItem.quantity;
+          existing.totalPrice += addedItem.totalPrice;
+        } else {
+          current.cartItems.push(addedItem);
+        }
+
+        current.totalAmount = current.cartItems.reduce(
+          (sum, i) => sum + i.totalPrice, 0
+        );
+
+        this.cartSignal.set({ ...current });
+      })
+    );
+}
+
 
 
 
