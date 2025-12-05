@@ -82,79 +82,23 @@ export class ProductListComponent implements OnInit {
   });
 }
 
-
-  // Load products with current filters
-//  loadProducts(): void {
-//   if (this.selectedCategoryId) {
-//     this.productService.getProductsByCategory(this.selectedCategoryId).subscribe({
-//       next: (products) => {
-//         this.products = products;
-//         this.totalProducts = products.length;
-//       },
-//       error: console.error
-//     });
-//   }
-//   else if (this.selectedBrandId) {
-//     this.productService.getProductsByBrand(this.selectedBrandId).subscribe({
-//       next: (products) => {
-//         this.products = products;
-//         this.totalProducts = products.length;
-//       },
-//       error: console.error
-//     });
-//   }
-
-//   else {
-//     // default: load all
-//     this.productService.getAllProducts(this.currentFilter).subscribe({
-//       next: (products) => {
-//         this.products = products;
-//         this.totalProducts = products.length;
-//       },
-//       error: console.error
-//     });
-//   }
-// }
 loadProducts(): void {
+  this.isLoading = true;
+  this.error = null;
 
-  // 1️⃣ Category has highest priority
-  if (this.selectedCategoryId) {
-    this.productService.getProductsByCategory(this.selectedCategoryId).subscribe({
-      next: products => {
-        this.products = products;
-        this.totalProducts = products.length;
-      },
-      error: console.error
-    });
-    return;
-  }
+  this.productService.filterProducts(this.currentFilter).subscribe({
+    next: products => {
+      this.products = products;
+      this.totalProducts = products.length;
+      this.isLoading = false;
+    },
+    error: err => {
+      this.error = "Failed to load products";
+      this.isLoading = false;
+    }
+  });
+}
 
-  // 2️⃣ Brand second priority
-  if (this.selectedBrandId) {
-    this.productService.getProductsByBrand(this.selectedBrandId).subscribe({
-      next: products => {
-        this.products = products;
-        this.totalProducts = products.length;
-      },
-      error: console.error
-    });
-    return;
-  }
-
-  if(this.currentFilter){
-    this.productService.filterProducts(this.currentFilter).subscribe({
-      next: products => {
-        this.products = products;
-        this.totalProducts = products.length;
-        
-        
-      },
-      error: console.error
-    });
-
-
-  
-  }}
 
 
 
@@ -217,8 +161,7 @@ loadCategories(): void {
 
   // Event Handlers
 
-  //When user selects a category
-  onCategorySelected(categoryId: number): void {
+ onCategorySelected(categoryId: number): void {
   if (categoryId === 0) {
     this.selectedCategoryId = null;
     this.currentFilter.categoryId = undefined;
@@ -228,20 +171,15 @@ loadCategories(): void {
   }
 
   this.selectedCategoryId = categoryId;
-
-  // NEW: fetch selected category
-  this.productService.getCategoryById(categoryId).subscribe(category => {
-    console.log("Selected category details:", category);
-  });
-
   this.currentFilter = { ...this.currentFilter, categoryId };
 
   this.router.navigate(['/shopping/category', categoryId]);
   this.loadProducts();
 }
 
+
   // When user selects a brand
- onBrandSelected(brandId: number): void {
+onBrandSelected(brandId: number): void {
   if (brandId === 0) {
     this.selectedBrandId = null;
     this.currentFilter.brandId = undefined;
@@ -251,12 +189,6 @@ loadCategories(): void {
   }
 
   this.selectedBrandId = brandId;
-
-  // NEW: fetch selected brand
-  this.productService.getBrandById(brandId).subscribe(brand => {
-    console.log("Selected brand details:", brand);
-  });
-
   this.currentFilter = { ...this.currentFilter, brandId };
 
   this.router.navigate(['/shopping/brand', brandId]);
@@ -269,9 +201,7 @@ loadCategories(): void {
     this.currentFilter = { ...this.currentFilter, ...filter };
     this.currentPage = 0;
     this.loadProducts();
-  
-    
-   
+    console.log(this.currentFilter);
     
   }
 

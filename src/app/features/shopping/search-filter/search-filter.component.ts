@@ -43,7 +43,7 @@ export class SearchFilterComponent implements OnInit {
     { min: 100, max: 200, label: '$100 - $200' },
     { min: 200, max: 500, label: '$200 - $500' },
     { min: 500, max: 1000, label: '$500 - $1000' },
-    { min: 1000, max: null, label: 'Over $1000' }
+    { min: 1000, max: 1000000000, label: 'Over $1000' }
   ];
   
   ratingOptions = [4.5, 4, 3.5, 3];
